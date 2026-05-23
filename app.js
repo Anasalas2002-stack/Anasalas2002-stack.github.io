@@ -722,7 +722,7 @@ function finishOnboarding() {
 // ── Service Worker ───────────────────────────────────
 function registerSW() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(reg => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
       console.log('SW registered');
     }).catch(console.error);
   }
