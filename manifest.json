@@ -1,8 +1,8 @@
 {
   "name": "Mi Mejor Versión",
-  ""short_name": "Mi Versión",
+  "short_name": "Mi Versión",
   "description": "Tu plan de entrenamiento personalizado de 6 meses",
-  "start_url": "/",
+  "start_url": "/ana-gym-app/",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#c62828",
