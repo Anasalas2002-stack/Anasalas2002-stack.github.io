@@ -722,8 +722,11 @@ function finishOnboarding() {
 // ── Service Worker ───────────────────────────────────
 function registerSW() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').then(reg => {
-      console.log('SW registered');
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      regs.forEach(r => { if (!r.scope.includes('ana-gym-app')) r.unregister(); });
+    });
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg => {
+      reg.update();
     }).catch(console.error);
   }
 }
