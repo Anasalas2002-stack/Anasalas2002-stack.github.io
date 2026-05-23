@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AnaGym">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Ana Gym Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#111118;
+  --bg3:#1a1a24;
+  --bg4:#22222e;
+  --card:#1e1e2a;
+  --border:#2a2a3a;
+  --text:#f0f0f8;
+  --text2:#9090b0;
+  --text3:#5a5a7a;
+  --red:#e53935;
+  --red-light:#ffebee;
+  --red-dim:rgba(229,57,53,0.12);
+  --blue:#1e88e5;
+  --blue-dim:rgba(30,136,229,0.12);
+  --green:#43a047;
+  --green-dim:rgba(67,160,71,0.12);
+  --purple:#8e24aa;
+  --purple-dim:rgba(142,36,170,0.12);
+  --gold:#f9a825;
+  --gold-dim:rgba(249,168,37,0.12);
+  --radius:16px;
+  --radius-sm:10px;
+  --tab-h:72px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --font-display:'DM Serif Display',serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-body)}
+body{display:flex;flex-direction:column;font-size:15px;line-height:1.5}
+
+/* ── App Shell ────────────────────────────────────── */
+#app{flex:1;display:flex;flex-direction:column;overflow:hidden;max-width:430px;margin:0 auto;width:100%}
+#screens{flex:1;overflow:hidden;position:relative}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--tab-h) + var(--safe-bottom) + 12px);display:none;-webkit-overflow-scrolling:touch}
+.screen.active{display:block;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Header ──────────────────────────────────────── */
+.screen-header{padding:56px 20px 16px;background:linear-gradient(to bottom,var(--bg),transparent);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.screen-header h1{font-family:var(--font-display);font-size:28px;font-weight:400;letter-spacing:-0.5px}
+.screen-header p{color:var(--text2);font-size:13px;margin-top:2px}
+
+/* ── Tab Bar ─────────────────────────────────────── */
+#tabbar{height:var(--tab-h);padding-bottom:var(--safe-bottom);background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;align-items:stretch;position:relative;z-index:100;flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--text3);transition:color .2s;border:none;background:none;padding:0;font-family:var(--font-body)}
+.tab.active{color:var(--red)}
+.tab svg{width:22px;height:22px;stroke-width:1.8}
+.tab span{font-size:10px;font-weight:500;letter-spacing:.3px}
+
+/* ── Cards ───────────────────────────────────────── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:0 16px 12px}
+.card-sm{padding:12px;margin:0 16px 8px}
+
+/* ── Pill badges ─────────────────────────────────── */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.pill-red{background:var(--red-dim);color:var(--red)}
+.pill-blue{background:var(--blue-dim);color:var(--blue)}
+.pill-green{background:var(--green-dim);color:var(--green)}
+.pill-gold{background:var(--gold-dim);color:var(--gold)}
+.pill-gray{background:rgba(255,255,255,0.06);color:var(--text2)}
+
+/* ── Buttons ─────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-body);transition:opacity .15s,transform .1s;-webkit-appearance:none}
+.btn:active{opacity:.8;transform:scale(.98)}
+.btn-primary{background:var(--red);color:#fff}
+.btn-secondary{background:var(--bg4);color:var(--text)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btn-full{width:100%}
+.btn-sm{padding:7px 14px;font-size:13px;border-radius:8px}
+
+/* ── Progress ring ───────────────────────────────── */
+.ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.ring-label strong{font-size:22px;font-family:var(--font-display)}
+.ring-label small{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
+
+/* ── Exercise Card ───────────────────────────────── */
+.ex-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:0 16px 10px;transition:border-color .2s}
+.ex-card.glute{border-left:3px solid var(--red)}
+.ex-card.completed{border-color:var(--green);opacity:.7}
+.ex-card-header{padding:14px 14px 10px;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
+.ex-check{width:24px;height:24px;border-radius:8px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .2s;cursor:pointer}
+.ex-check.done{background:var(--green);border-color:var(--green)}
+.ex-info{flex:1;min-width:0}
+.ex-name{font-weight:600;font-size:15px;line-height:1.3}
+.ex-equip{font-size:12px;color:var(--text3);margin-top:2px}
+.ex-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ex-body{padding:0 14px 14px;border-top:1px solid var(--border)}
+.ex-weight-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.ex-weight-row label{font-size:12px;color:var(--text2);flex-shrink:0}
+.weight-display{flex:1;font-family:var(--font-display);font-size:20px;color:var(--text)}
+.weight-adj{display:flex;gap:6px;align-items:center}
+.weight-btn{width:36px;height:36px;border-radius:8px;background:var(--bg4);border:1px solid var(--border);color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.weight-input{width:70px;text-align:center;background:var(--bg4);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:16px;font-family:var(--font-display);padding:6px;-webkit-appearance:none}
+.ex-notes{font-size:12px;color:var(--text2);line-height:1.5;padding:10px 0}
+.video-toggle{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--blue);cursor:pointer;padding:4px 0}
+.video-wrap{border-radius:10px;overflow:hidden;margin-top:8px;aspect-ratio:16/9;background:#000}
+.video-wrap iframe{width:100%;height:100%;border:none}
+
+/* ── Today Screen ────────────────────────────────── */
+.today-hero{padding:16px 16px 8px}
+.today-day-label{font-size:12px;color:var(--text2);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px}
+.today-title{font-family:var(--font-display);font-size:32px;font-weight:400;line-height:1.1}
+.today-subtitle{color:var(--text2);font-size:13px;margin-top:4px}
+.today-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 16px}
+.stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center}
+.stat-box strong{display:block;font-family:var(--font-display);font-size:18px}
+.stat-box small{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.rest-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;padding:20px;text-align:center}
+.rest-emoji{font-size:64px}
+.section-label{font-size:11px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;padding:0 20px 8px;margin-top:4px}
+.cardio-card{background:linear-gradient(135deg,var(--gold-dim),transparent);border:1px solid rgba(249,168,37,0.3);border-radius:var(--radius);padding:14px 16px;margin:0 16px 12px}
+.cardio-title{font-weight:600;color:var(--gold);margin-bottom:4px}
+.cardio-desc{font-size:13px;color:var(--text2)}
+
+/* ── Week Screen ─────────────────────────────────── */
+.week-grid{display:flex;flex-direction:column;gap:8px;padding:0 16px}
+.week-day{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s}
+.week-day.today{border-color:var(--red);background:var(--red-dim)}
+.week-day.rest-day{opacity:.5}
+.week-day.done-day{border-color:var(--green)}
+.day-dot{width:42px;height:42px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:600;background:var(--bg4)}
+.day-dot.today-dot{background:var(--red);color:#fff}
+.day-dot strong{display:block;font-size:14px;line-height:1}
+.week-day-info{flex:1}
+.week-day-name{font-weight:600;font-size:14px}
+.week-day-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.week-done-badge{font-size:18px}
+
+/* ── Progress Screen ─────────────────────────────── */
+.phase-bar{margin:0 16px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;overflow:hidden}
+.phase-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:10px 0}
+.phase-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:3px;transition:width .6s ease}
+.phase-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3)}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 12px}
+.metric-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px}
+.metric-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.metric-value{font-family:var(--font-display);font-size:24px}
+.metric-input{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:16px;font-family:var(--font-display);padding:6px 10px;margin-top:6px;-webkit-appearance:none}
+
+/* ── Travel Screen (inside Profile) ─────────────── */
+.travel-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.travel-icon{width:44px;height:44px;border-radius:12px;background:var(--blue-dim);display:flex;align-items:center;justify-content:center;font-size:22px}
+.pause-badge{background:var(--gold-dim);border:1px solid rgba(249,168,37,0.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--gold)}
+
+/* ── Cycle Screen ────────────────────────────────── */
+.cycle-phases{display:flex;flex-direction:column;gap:8px;padding:0 16px}
+.cycle-phase{border-radius:12px;padding:14px;cursor:pointer;border:2px solid transparent;transition:border-color .2s}
+.cycle-phase.selected{border-color:currentColor}
+.cycle-phase-name{font-weight:600;font-size:15px}
+.cycle-phase-tip{font-size:12px;margin-top:4px;opacity:.8}
+.cycle-adj{text-align:center;padding:20px;font-size:13px;color:var(--text2)}
+.cycle-adj strong{display:block;font-family:var(--font-display);font-size:36px;margin-bottom:4px}
+
+/* ── Notification setup ──────────────────────────── */
+.notif-setup{background:linear-gradient(135deg,var(--red-dim),transparent);border:1px solid var(--red-dim);border-radius:var(--radius);padding:16px;margin:0 16px 12px}
+.notif-time{display:flex;align-items:center;gap:10px;margin-top:10px}
+.notif-time input[type=time]{background:var(--bg4);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:16px;padding:8px 12px;-webkit-appearance:none;flex:1}
+
+/* ── Modals ──────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .15s}
+.modal{background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--safe-bottom));width:100%;max-width:430px;max-height:85vh;overflow-y:auto;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal h2{font-family:var(--font-display);font-size:22px;margin-bottom:16px}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+
+/* ── Toast ───────────────────────────────────────── */
+#toast{position:fixed;bottom:calc(var(--tab-h) + var(--safe-bottom) + 12px);left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
+
+/* ── Divider ─────────────────────────────────────── */
+.divider{height:1px;background:var(--border);margin:4px 16px 12px}
+.spacer{height:8px}
+.p-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.p-row:last-child{border-bottom:none}
+.p-label{font-size:13px;color:var(--text2)}
+.p-value{font-size:13px;font-weight:600}
+input[type=date]{background:var(--bg4);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;padding:8px 12px;-webkit-appearance:none;width:100%;margin-top:6px}
+
+/* ── Onboarding ──────────────────────────────────── */
+#onboarding{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+#onboarding h1{font-family:var(--font-display);font-size:38px;line-height:1.1;margin:16px 0 8px}
+#onboarding p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:28px}
+.onb-emoji{font-size:64px}
+</style>
+</head>
+<body>
+<div id="onboarding" style="display:none">
+  <div class="onb-emoji">🍑</div>
+  <h1>Ana Gym Plan</h1>
+  <p>Tu plan de 6 meses con glúteos como prioridad. Pesos progresivos, videos de cada ejercicio y seguimiento inteligente.</p>
+  <p style="font-size:13px;color:var(--text3);margin-bottom:16px">¿Cuándo empiezas? (o pon hoy si ya empezaste)</p>
+  <input type="date" id="startDateInput" style="margin-bottom:16px;font-size:16px;max-width:260px">
+  <button class="btn btn-primary btn-full" onclick="finishOnboarding()" style="max-width:320px">Empezar el plan 🚀</button>
+</div>
+
+<div id="app">
+  <div id="screens">
+    <!-- HOY -->
+    <div class="screen active" id="screen-today"></div>
+    <!-- SEMANA -->
+    <div class="screen" id="screen-week"></div>
+    <!-- PROGRESO -->
+    <div class="screen" id="screen-progress"></div>
+    <!-- PERFIL/VIAJES/CICLO -->
+    <div class="screen" id="screen-profile"></div>
+  </div>
+
+  <nav id="tabbar">
+    <button class="tab active" onclick="showTab('today',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Hoy</span>
+    </button>
+    <button class="tab" onclick="showTab('week',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Semana</span>
+    </button>
+    <button class="tab" onclick="showTab('progress',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Progreso</span>
+    </button>
+    <button class="tab" onclick="showTab('profile',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Perfil</span>
+    </button>
+  </nav>
+</div>
+
+<div id="toast"></div>
+<script src="plan-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

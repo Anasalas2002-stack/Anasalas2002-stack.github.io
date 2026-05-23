@@ -1,0 +1,14 @@
+{
+  "name": "Ana Gym Plan",
+  "short_name": "AnaGym",
+  "description": "Tu plan de entrenamiento personalizado de 6 meses",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#c62828",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
