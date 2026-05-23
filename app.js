@@ -118,7 +118,7 @@ function renderToday() {
       <div class="rest-screen">
         <div class="rest-emoji">😴</div>
         <div>
-          <h2 style="font-family:var(--font-display);font-size:24px">Día de descanso</h2>
+          <h2 style="font-family:var(--font-display);font-size:22px;font-weight:700">Día de descanso</h2>
           <p style="color:var(--text2);margin-top:8px;font-size:14px">El descanso es parte del plan.<br>Hoy tu cuerpo se recupera y crece.</p>
         </div>
         ${dow === 3 ? `<div class="cardio-card" style="width:100%;margin:0;text-align:left">
@@ -239,11 +239,11 @@ function renderExerciseCard(ex, week, dateStr, adj) {
       </div>
       <div class="ex-notes">${ex.notes}</div>
       ${EXERCISE_VIDEOS[ex.videoId] ? `
-      <div class="video-toggle" onclick="toggleVideo('${ex.id}')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        ${videoOpen ? 'Ocultar video' : 'Ver video del ejercicio'}
-      </div>
-      ${videoOpen ? `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${EXERCISE_VIDEOS[ex.videoId]}?rel=0&modestbranding=1" allowfullscreen loading="lazy"></iframe></div>` : ''}
+      <a href="https://www.youtube.com/watch?v=${EXERCISE_VIDEOS[ex.videoId]}" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 14px;background:rgba(255,0,0,0.12);border:1px solid rgba(255,0,0,0.25);border-radius:8px;color:#ff4444;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+        Ver ejercicio en YouTube
+      </a>
       ` : ''}
     </div>
   </div>`;
@@ -644,7 +644,7 @@ function sendTestNotif() {
   const dow = todayDow();
   const workout = DAY_WORKOUT_MAP[dow];
   const msg = MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
-  new Notification('💪 Ana Gym', {
+  new Notification('💪 Mi Mejor Versión', {
     body: workout ? `${workout.emoji} Hoy: ${workout.name} — ${workout.focus}` : msg,
     icon: '/icon-192.png',
   });
@@ -669,7 +669,7 @@ function downloadCalendarEvent() {
     'BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT',
     `DTSTART:${fmt(start)}`,
     `DTEND:${fmt(end)}`,
-    `SUMMARY:${workout.emoji} ${workout.name} — Ana Gym`,
+    `SUMMARY:${workout.emoji} ${workout.name} — Mi Mejor Versión`,
     `DESCRIPTION:${workout.focus}\\nSemana ${STATE.currentWeek} · ${getFaseName(STATE.currentWeek)}`,
     'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:Reminder', 'END:VALARM',
     'END:VEVENT', 'END:VCALENDAR'

@@ -1,6 +1,6 @@
 {
-  "name": "Ana Gym Plan",
-  "short_name": "AnaGym",
+  "name": "Mi Mejor Versión",
+  ""short_name": "Mi Versión",
   "description": "Tu plan de entrenamiento personalizado de 6 meses",
   "start_url": "/",
   "display": "standalone",
